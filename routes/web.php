@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\AdminController;
+use App\Http\Middleware\AdminAuthMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +31,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+Route::get('/create', [ReportController::class, 'create'])->name('reports.create-form');
+Route::get('/history', [ReportController::class, 'history'])->name('reports.reports-history');
+
+Route::middleware(['auth', AdminAuthMiddleware::class])->group(function () {
+    Route::get('/admin', [AdminController::class, 'admin'])->name('admin-panel');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
+    Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
+});
+
+require __DIR__ . '/auth.php';

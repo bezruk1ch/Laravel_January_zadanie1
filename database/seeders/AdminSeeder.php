@@ -26,6 +26,7 @@ class AdminSeeder extends Seeder
                 'email' => 'sergeeva@example.com',
                 'email_verified_at' => now(),
                 'remember_token' => Str::random(10),
+                'role' => 'admin',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
