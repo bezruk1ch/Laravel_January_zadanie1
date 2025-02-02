@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AdminController;
 use App\Http\Middleware\AdminAuthMiddleware;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,8 +18,14 @@ use App\Http\Middleware\AdminAuthMiddleware;
 |
 */
 
+// Route::get('/', function () {
+// return view('welcome');
+// });
+
 Route::get('/', function () {
-    return view('welcome');
+    return auth()->check()
+        ? redirect()->route('dashboard')
+        : redirect()->route('register');
 });
 
 Route::get('/dashboard', function () {
@@ -29,18 +36,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-Route::get('/create', [ReportController::class, 'create'])->name('reports.create-form');
-Route::get('/history', [ReportController::class, 'history'])->name('reports.reports-history');
+    Route::get('/create', [ReportController::class, 'create'])->name('reports.create-form');
+    Route::get('/history', [ReportController::class, 'history'])->name('reports.reports-history');
+
+    Route::post('/create', [ReportController::class, 'store'])->name('reports.store');
+});
 
 Route::middleware(['auth', AdminAuthMiddleware::class])->group(function () {
     Route::get('/admin', [AdminController::class, 'admin'])->name('admin-panel');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
-    Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
+    Route::post('/admin/reports/{id}/confirm', [AdminController::class, 'confirm'])->name('reports.confirm');
+    Route::post('/admin/reports/{id}/cancel', [AdminController::class, 'cancel'])->name('reports.cancel');
 });
 
 require __DIR__ . '/auth.php';

@@ -13,8 +13,21 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Начальная страница') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('reports.reports-history')" :active="request()->routeIs('reports.reports-history')">
+                        {{ __('История заявок') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('reports.create-form')" :active="request()->routeIs('reports.create-form')">
+                        {{ __('Создать заявку') }}
+                    </x-nav-link>
+                    @auth
+                    @if (Auth::user()->role === 'admin')
+                    <x-nav-link :href="route('admin-panel')" :active="request()->routeIs('admin-panel')">
+                        {{ __('Панель администратора') }}
+                    </x-nav-link>
+                    @endif
+                    @endauth
                 </div>
             </div>
 
@@ -43,7 +56,7 @@
                             @csrf
 
                             <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
+                                onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
@@ -89,7 +102,7 @@
                     @csrf
 
                     <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
+                        onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>

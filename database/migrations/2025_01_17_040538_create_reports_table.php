@@ -18,6 +18,8 @@ return new class extends Migration
             $table->date('date');
             $table->time('time');
             $table->string('payment');
+            $table->string('status');
+            $table->string('rejection_reason')->nullable();
             $table->unsignedBigInteger('service_id');
             $table->foreign('service_id')->references('id')->on('services');
             $table->unsignedBigInteger('user_id');

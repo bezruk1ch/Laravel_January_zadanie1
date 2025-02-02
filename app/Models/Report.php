@@ -20,4 +20,23 @@ class Report extends Model
     {
         return $this->belongsTo(Service::class); // Один отчет относится к одному сервису
     }
+
+    // Удобный доступ к статусам
+    const STATUS_NEW = 'new';
+    const STATUS_COMPLETED = 'completed';
+    const STATUS_CANCELLED = 'cancelled';
+
+    public function getStatusLabelAttribute()
+{
+    switch ($this->status) {
+        case 'new':
+            return 'Новая заявка';
+        case 'completed':
+            return 'Услуга оказана';
+        case 'cancelled':
+            return 'Услуга отменена';
+        default:
+            return 'Неизвестный статус';
+    }
+}
 }

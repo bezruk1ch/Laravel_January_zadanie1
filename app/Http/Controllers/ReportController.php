@@ -17,7 +17,9 @@ class ReportController extends Controller
 
     public function history()
     {
-        $reports = Report::with('service')->get(); // Подгружаем услуги
+        $userId = auth()->id(); // Получаем ID текущего пользователя
+        $reports = Report::where('user_id', $userId)->with('service')->get(); // Фильтруем заявки по user_id
+
         return view('reports.reports-history', compact('reports'));
     }
 
@@ -42,9 +44,11 @@ class ReportController extends Controller
             'payment' => $request->payment,
             'contact' => $request->contact,
             'user_id' => auth()->user()->id,
+            'status' => Report::STATUS_NEW, // Установка статуса при создании
+            'rejection_reason' => null, // По умолчанию заявка не отклонена
         ]);
 
-        
+
 
         // Редирект обратно с сообщением
         return redirect()->route('reports.reports-history')->with('success', 'Заявка успешно создана!');

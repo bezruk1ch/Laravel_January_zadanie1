@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('История заявок') }}
+            {{ __('Список истории заявок') }}
         </h2>
     </x-slot>
 
@@ -28,6 +28,10 @@
                             <p><strong>Дата:</strong> {{ $report->date }}</p>
                             <p><strong>Время:</strong> {{ \Carbon\Carbon::parse($report->time)->format('H:i') }}</p>
                             <p><strong>Тип оплаты:</strong> {{ $report->payment === 'cash' ? 'Наличные' : 'Карта' }}</p>
+                            <p><strong>Статус:</strong> {{ $report->status_label }}</p>
+                            @if($report->status === 'cancelled')
+                            <p class="text-red-500"><strong>Причина отклонения:</strong> {{ $report->rejection_reason }}</p>
+                            @endif
                         </li>
                         @endforeach
                     </ul>
